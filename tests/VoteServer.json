@@ -1,0 +1,9 @@
+{
+	firstMixnode: "TestMix",
+	"verifyServers": [
+		"v1",
+		"v2",
+		"v3"	
+	],
+	name: "Test"
+}

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+terminator -x java -cp bin:lib/javajson.jar -Djava.rmi.server.hostname=localhost -Djava.security.policy=lazy.policy -Djava.rmi.server.codebase=file:bin/ org.juddholm.voteserver.VoteServer json/VoteServer.json &

@@ -1,0 +1,10 @@
+{
+	"name": "Test",
+	"mixnodes": [
+		"m1",
+		"m2",
+		"m3"	
+	],
+	"repetitions": 3,
+	"voteServer": "testvoteserver"
+}

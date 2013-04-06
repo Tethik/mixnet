@@ -1,0 +1,10 @@
+{
+	"name": "v3",
+	"mixnodes": [
+		"//localhost/m1",
+		"//localhost/m2",
+		"//localhost/m3"	
+	],
+	"repetitions": 2,
+	"voteServer": "//localhost/TestVoteServer"
+}

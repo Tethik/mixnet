@@ -1,0 +1,8 @@
+#!/bin/bash
+
+./start_registry
+./start_mixnode
+./start_verifier json/v1.json
+./start_verifier json/v2.json
+./start_verifier json/v3.json
+#./start_verifier v1

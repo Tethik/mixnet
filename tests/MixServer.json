@@ -1,0 +1,13 @@
+{
+	"name": "Test",
+	"previous": "1",
+	"next": "3",
+	"verifyServers": [
+		"v1",
+		"v2",
+		"v3"	
+	],
+	"repetitions": 3,
+	"last": false,
+	first: true
+}

@@ -1,0 +1,10 @@
+{
+	"name": "m3",
+	"previous": "//localhost/m2",
+	"next": "//localhost/m1",
+	"verifyServers": [
+	],
+	"repetitions": 3,
+	last: true,
+	first: false
+}
