@@ -1,5 +1,5 @@
 #!/bin/bash
 
-terminator -x java -cp bin:lib/javajson.jar -Djava.rmi.server.hostname=localhost -Djava.security.policy=lazy.policy -Djava.rmi.server.codebase=file:bin/ org.juddholm.mixnet.mixserver.rmi.MixServerRMI json/m1.json &
-terminator -x java -cp bin:lib/javajson.jar -Djava.rmi.server.hostname=localhost -Djava.security.policy=lazy.policy -Djava.rmi.server.codebase=file:bin/ org.juddholm.mixnet.mixserver.rmi.MixServerRMI json/m2.json &
-terminator -x java -cp bin:lib/javajson.jar -Djava.rmi.server.hostname=localhost -Djava.security.policy=lazy.policy -Djava.rmi.server.codebase=file:bin/ org.juddholm.mixnet.mixserver.rmi.MixServerRMI json/m3.json &
+terminator -x java -cp bin:lib/javajson.jar -Djava.rmi.server.hostname=localhost -Djava.security.policy=lazy.policy -Djava.rmi.server.codebase=file:bin/ org.juddholm.mixnet.mixserver.rmi.MixServerRMI $@ &
+#terminator -x java -cp bin:lib/javajson.jar -Djava.rmi.server.hostname=localhost -Djava.security.policy=lazy.policy -Djava.rmi.server.codebase=file:bin/ org.juddholm.mixnet.mixserver.rmi.MixServerRMI json/m2.json &
+#terminator -x java -cp bin:lib/javajson.jar -Djava.rmi.server.hostname=localhost -Djava.security.policy=lazy.policy -Djava.rmi.server.codebase=file:bin/ org.juddholm.mixnet.mixserver.rmi.MixServerRMI json/m3.json &

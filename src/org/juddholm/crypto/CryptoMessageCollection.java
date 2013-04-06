@@ -5,10 +5,9 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 public class CryptoMessageCollection implements Serializable, Cloneable {
 	/**
@@ -95,6 +94,19 @@ public class CryptoMessageCollection implements Serializable, Cloneable {
 			newPermutation.add(messages.remove(index));			
 		}
 		messages = newPermutation;
+	}
+	
+	/**
+	 * Sorts the collection by comparing as strings. 
+	 */
+	public void sort()
+	{
+		Collections.sort(messages, new Comparator<CryptoMessage>() {
+			@Override
+			public int compare(CryptoMessage o1, CryptoMessage o2) {			
+				return o1.getMessage().compareTo(o2.getMessage());
+			}
+		});
 	}
 	
 	public void sign(PrivateKey privateKey)

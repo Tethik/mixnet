@@ -11,5 +11,5 @@ import org.juddholm.mixnet.enums.EncryptionLayer;
 public interface OutputHandler {
 	public KeyCollection getPublicKeys();
 	public KeyCollection getPrivateKeys();
-	public void sendDummy(CryptoMessage message) throws RemoteException, MalformedURLException, NotBoundException;
+	public void sendDummy(CryptoMessage message);
 }

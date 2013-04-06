@@ -12,19 +12,18 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.json.JSONException;
+import org.juddholm.crypto.CryptoMessage;
 import org.juddholm.crypto.CryptoMessageCollection;
 import org.juddholm.crypto.KeyCollection;
 import org.juddholm.crypto.VerificationResult;
 import org.juddholm.mixnet.enums.VerificationType;
 import org.juddholm.mixnet.mixserver.rmi.MixServerInterface;
-import org.juddholm.crypto.CryptoMessage;
 import org.juddholm.mixnet.verifyserver.InfoHandler;
 import org.juddholm.mixnet.verifyserver.OutputHandler;
 import org.juddholm.mixnet.verifyserver.VerifyServer;
 import org.juddholm.mixnet.verifyserver.VerifyServerSettings;
 import org.juddholm.rmi.RMIServer;
 import org.juddholm.voteserver.VoteInserter;
-import org.juddholm.voteserver.VoteServer;
 
 public class VerifyServerRMI extends RMIServer implements VerifyServerInterface, OutputHandler, InfoHandler {
 
@@ -159,7 +158,7 @@ public class VerifyServerRMI extends RMIServer implements VerifyServerInterface,
 		}
 		
 		try {
-			VerifyServerRMI s = new VerifyServerRMI(args[0]);
+			new VerifyServerRMI(args[0]);
 		} catch (RemoteException | FileNotFoundException
 				| MalformedURLException | JSONException e) {
 			// TODO Auto-generated catch block
@@ -168,9 +167,24 @@ public class VerifyServerRMI extends RMIServer implements VerifyServerInterface,
 	}
 
 	@Override
-	public void sendDummy(CryptoMessage message) throws RemoteException, MalformedURLException, NotBoundException {		
-		VoteInserter inserter = (VoteInserter) Naming.lookup(settings.getVoteServer());
-		inserter.addVote(message);
+	public void sendDummy(CryptoMessage message) {		
+		while(true) {
+			VoteInserter inserter;
+			try {
+				inserter = (VoteInserter) Naming.lookup(settings.getVoteServer());
+				inserter.addVote(message);
+				break;
+			} catch (MalformedURLException | RemoteException
+					| NotBoundException e) {				
+				try {
+					Thread.sleep(400);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			
+		}
 
 	}
 	

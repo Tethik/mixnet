@@ -11,12 +11,14 @@ public class DummyVerification implements Verification {
 	private CryptoMessage beforeFinal;
 	private CryptoMessage fullyEncrypted;
 	private KeyCollection publicKeys;
+	private int repetitions;
 	
-	public DummyVerification(KeyCollection publicKeys)
+	public DummyVerification(KeyCollection publicKeys, int repetitions)
 	{
-		this.publicKeys = publicKeys;
+		this.repetitions = repetitions;
+		this.publicKeys = publicKeys;		
 	}
-	
+
 	public static String randomString()
 	{
 		StringBuilder builder = new StringBuilder();
@@ -68,29 +70,21 @@ public class DummyVerification implements Verification {
 
 	@Override
 	public VerificationResult verify(CryptoHistory history) {
-		DummyVerificationResult result = new DummyVerificationResult();
+		DummyVerificationResult result = new DummyVerificationResult();		
+		CryptoMessageCollection collection = history.getItems().get(history.getItems().size() - 1).getColl();
 		
-		List<CryptoHistoryItem> items = history.getItems();
-		CryptoHistoryItem lastItem = items.get(items.size() - 1);
-		
-		if(lastItem.getLayer() != EncryptionLayer.FINAL)
-		{
-			throw new IllegalArgumentException("Encryption layer of collection is not FINAL. It is " + lastItem.getLayer());
-		}
-		
-		boolean found = false;
-		for(CryptoMessage msg : lastItem.getColl().getList())
+		int found = 0;
+		for(CryptoMessage msg : collection.getList())
 		{
 			if(msg.equals(beforeFinal))
 			{
-				found = true;
-				break;
+				found++;				
 			}
 		}
 		
-		if(!found)
+		if(found != repetitions)
 		{
-			result.addErrorMessage("Dummy message is missing.");
+			result.addErrorMessage("Dummy message is missing or altered. Expected " + repetitions + " but found " + found);
 		}		
 		
 		result.setBeforeFinalDummy(beforeFinal);

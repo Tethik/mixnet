@@ -8,17 +8,12 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.security.Key;
-import java.security.PublicKey;
-import java.util.Collections;
-import java.util.List;
 
 import org.json.JSONException;
 import org.juddholm.crypto.ConcatCryptoMessage;
 import org.juddholm.crypto.CryptoMessage;
 import org.juddholm.crypto.KeyCollection;
 import org.juddholm.mixnet.enums.EncryptionLayer;
-import org.juddholm.mixnet.interfaces.VotingStageHandler;
 import org.juddholm.mixnet.mixserver.rmi.MixServerInterface;
 import org.juddholm.voteserver.VoteInserter;
 
@@ -27,7 +22,6 @@ public class VoteClient {
 	private KeyCollection keys = new KeyCollection();
 	private VoteInserter insert;
 	private VoteClientSettings settings;
-	private VotingStageHandler stageHandler;
 	
 	public VoteClient(String filename) throws RemoteException, MalformedURLException, NotBoundException, InterruptedException, FileNotFoundException, JSONException
 	{ 
@@ -53,30 +47,13 @@ public class VoteClient {
 			keys.union(nodekeys);
 			System.out.println("# Added "+nodekeys.size()+" public keys");
 		}
-		
-		/*
-		for(EncryptionLayer layer : EncryptionLayer.values())
-			Collections.reverse(keys.getKeys(layer)); // Reverse!
-		*/
 	}
-	/*
-	private void addEncryptionLayer(CryptoMessage msg, EncryptionLayer layer) 
-	{
-		List<Key> stageKeys = keys.getKeys(layer);
-		for(Key key : stageKeys) {
-			System.out.println("Encrypting with key: " + key.hashCode());
-			msg.encrypt((PublicKey) key);
-		}
-		System.out.println("# Encrypted layer " + layer.toString());		
-	}
-	*/
+	
 	
 	public CryptoMessage encryptVote(String vote)
 	{
 		System.out.println("Encrypting vote..");
 		CryptoMessage msg = new CryptoMessage(vote);
-		
-		EncryptionLayer[] stages = EncryptionLayer.values();
 		
 		// Final
 		keys.addEncryptionLayer(msg, EncryptionLayer.FINAL);
@@ -113,7 +90,7 @@ public class VoteClient {
 	{
 		if(args.length < 1)
 		{
-			System.out.println("Usage: voteclient [settings file]");
+			System.out.println("Usage: voteclient [settings file] (vote)");
 			return ;
 		}
 			
@@ -132,9 +109,14 @@ public class VoteClient {
 		
 		try {
 			System.out.print("Vote:");
-			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-			String vote = reader.readLine();			
-			client.sendVote(vote);				
+			if(args.length == 2) {
+				System.out.println(args[1]);
+				client.sendVote(args[1]); 
+			} else {
+				BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+				String vote = reader.readLine();			
+				client.sendVote(vote);
+			}
 		} catch (IOException e) {
 			System.err.println("Voting failed due to exception.");
 			System.err.println(e.getMessage());

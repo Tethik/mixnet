@@ -65,15 +65,17 @@ public class MixServer implements Runnable {
 		
 		if(layer == EncryptionLayer.FINAL && output.isFirst())
 		{
+			cleanupDuplicates();
 			List<CryptoMessage> dummies =  output.getDummies();
 			System.out.println("# Removing " + dummies.size() + " dummies");
 			for(CryptoMessage msg : dummies)
 				collection.remove(msg);
 		}
 		
+		/*
 		if(layer == EncryptionLayer.Mix2 && output.isLast())
 			collection.remove(collection.get(0)); // Simulated evilness
-		//System.out.println("Decrypting...");
+		*/
 		
 		PrivateKey key = (PrivateKey) keys.getPrivateKeys().getKeys(layer).get(0);
 		PublicKey pkey = (PublicKey) keys.getPublicKeys().getKeys(layer).get(0);	
@@ -108,27 +110,9 @@ public class MixServer implements Runnable {
 			}
 			collection = newColl;
 		} else if(output.isLast() && layer == EncryptionLayer.REPETITION) {
-			ArrayList<CryptoMessage> messages = new ArrayList<CryptoMessage>();
-			CryptoMessageCollection newColl = new CryptoMessageCollection();
 			
-			//TODO hashtable? or sort (n log n + n ist för n*n)
-			for(CryptoMessage msg : collection.getList()) {
-				boolean found = false;
-				for(CryptoMessage m : messages) {
-					if(m.equals(msg)) {
-						found = true;
-						break;
-					}
-				}
-				
-				if(!found) {
-					newColl.add(msg);
-					messages.add(msg);
-				}
-				
-			}
-				
-			collection = newColl;
+			System.out.println("# Sorting collection");
+			collection.sort();			
 		}		
 			
 		if(layer == EncryptionLayer.Mix1 || layer == EncryptionLayer.Mix2)
@@ -137,9 +121,37 @@ public class MixServer implements Runnable {
 		return true;		
 	}
 	
+	public void cleanupDuplicates() {
+		CryptoMessageCollection newColl = new CryptoMessageCollection();
+		int copies = 0;
+		CryptoMessage prev = collection.get(0);
+		for(int i = 0; i < collection.size(); i++)
+		{
+			CryptoMessage curr = collection.get(i);
+			
+			if(prev.equals(curr)) {
+				copies++;
+			} else {	
+				if(copies == repetitions)
+				{
+					newColl.add(prev);
+				}
+				copies = 1;
+			}		
+			
+			prev = curr;				
+		}
+		
+		if(copies == repetitions)
+		{
+			newColl.add(prev);
+		}	
+		collection = newColl;
+	}
+	
 	public synchronized void sendCollection(EncryptionLayer layer) {
 		PrivateKey key = (PrivateKey) keys.getPrivateKeys().getKeys(layer).get(0);
-		collection.sign(key);
+		//collection.sign(key);
 		output.putCryptoCollection(collection, layer);
 		info.releaseCollection(collection);
 		collection = null;

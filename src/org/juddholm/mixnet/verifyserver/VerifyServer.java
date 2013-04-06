@@ -49,25 +49,16 @@ public class VerifyServer implements Runnable {
 	public VerifyServer(InfoHandler info, OutputHandler output, int repetitions) {
 		this.info = info;
 		this.output = output;
-		this.repetitions = repetitions;
-		verifications.put(VerificationType.Explicit, new ExplicitVerification(EncryptionLayer.Mix1, EncryptionLayer.Mix1));
+		this.repetitions = repetitions;	
 		keys.getPublicKeys().union(output.getPublicKeys());
-		DummyVerification veri = new DummyVerification(keys.getPublicKeys());
-		verifications.put(VerificationType.Dummies, veri);
-		CryptoMessage msg = veri.generateDummy(repetitions);
 		
-		while(true) 
-			try {
-				output.sendDummy(msg);
-				break;
-			} catch (RemoteException | MalformedURLException | NotBoundException e) {				
-				try {
-					Thread.sleep(400);
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
+		ExplicitVerification everi = new ExplicitVerification(EncryptionLayer.Mix1, EncryptionLayer.Mix1);
+		DummyVerification veri = new DummyVerification(keys.getPublicKeys(), repetitions);		
+		verifications.put(VerificationType.Explicit, everi);
+		verifications.put(VerificationType.Dummies, veri);
+		CryptoMessage msg = veri.generateDummy(repetitions);	
+		output.sendDummy(msg);
+
 	}
 	
 	private int getExpectedNumberOfEncryptions(EncryptionLayer layer)
@@ -157,8 +148,7 @@ public class VerifyServer implements Runnable {
 		if(!collection.checkSignatures(key)) {			
 			System.out.println("Incorrect signature! Ignoring.");
 			//return; // TODO: Report this?
-		}
-		
+		}		
 	
 		System.out.println("Got signed collection");
 		*/

@@ -7,9 +7,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 
 import org.json.JSONException;
 import org.juddholm.crypto.CryptoMessage;
@@ -27,7 +25,6 @@ public class VoteServer extends RMIServer implements VoteInserter {
 	private CryptoMessageCollection collection = new CryptoMessageCollection();
 	
 	private VoteServerSettings settings;
-	private VoteServer server;
 	private boolean closed = false;
 	
 	public VoteServer(String filename) throws FileNotFoundException, JSONException, RemoteException, MalformedURLException
