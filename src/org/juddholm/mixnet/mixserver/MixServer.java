@@ -210,6 +210,16 @@ public class MixServer implements Runnable {
 		
 			}			
 			else if(layer == EncryptionLayer.REPETITION) {
+				
+				System.out.println("# Waiting for tracing verification");
+				if(!verify(VerificationType.Tracing))
+				{
+					System.out.println("# Tracing Verification failed!");
+					break;
+				} else {
+					System.out.println("# Tracing Verification passed!");
+				}
+				
 				System.out.println("# Waiting for dummy verification");
 				if(!verify(VerificationType.Dummies))
 				{

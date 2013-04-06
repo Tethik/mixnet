@@ -18,6 +18,7 @@ import org.juddholm.crypto.DummyVerification;
 import org.juddholm.crypto.ExplicitVerification;
 import org.juddholm.crypto.KeyCollection;
 import org.juddholm.crypto.KeyPairCollection;
+import org.juddholm.crypto.TracingVerification;
 import org.juddholm.crypto.VerificationResult;
 import org.juddholm.mixnet.enums.EncryptionLayer;
 import org.juddholm.mixnet.enums.VerificationType;
@@ -53,10 +54,12 @@ public class VerifyServer implements Runnable {
 		keys.getPublicKeys().union(output.getPublicKeys());
 		
 		ExplicitVerification everi = new ExplicitVerification(EncryptionLayer.Mix1, EncryptionLayer.Mix1);
-		DummyVerification veri = new DummyVerification(keys.getPublicKeys(), repetitions);		
+		DummyVerification dveri = new DummyVerification(keys.getPublicKeys(), repetitions);
+		TracingVerification tveri = new TracingVerification(repetitions);
 		verifications.put(VerificationType.Explicit, everi);
-		verifications.put(VerificationType.Dummies, veri);
-		CryptoMessage msg = veri.generateDummy(repetitions);	
+		verifications.put(VerificationType.Dummies, dveri);
+		verifications.put(VerificationType.Tracing, tveri);
+		CryptoMessage msg = dveri.generateDummy(repetitions);	
 		output.sendDummy(msg);
 
 	}
@@ -85,15 +88,6 @@ public class VerifyServer implements Runnable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-	}
-	
-	// TODO: jsonify!
-	private VerificationType getVerificationTypes(EncryptionLayer layer)
-	{
-		if(layer == EncryptionLayer.Mix2)
-			return VerificationType.Explicit;
-		
-		return VerificationType.None;		
 	}
 	
 	public void verify(VerificationType type) {
@@ -181,6 +175,8 @@ public class VerifyServer implements Runnable {
 		verify(VerificationType.Explicit);
 		System.out.println("# Waiting for results from Final");
 		waitFor(EncryptionLayer.FINAL);
+		System.out.println("# Now running tracing verification");
+		verify(VerificationType.Tracing);
 		System.out.println("# Now tracing dummies");
 		verify(VerificationType.Dummies);
 		
