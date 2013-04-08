@@ -107,17 +107,10 @@ public class ConcatCryptoMessage extends CryptoMessage implements Serializable, 
 	
 	@Override
 	public void encrypt(PublicKey publicKey)
-	{
-		
-		try {
-			SecretKey key = generateKey();
-			for(CryptoMessage msg : messages)
-				msg.encrypt(publicKey, key);	
-			this.concatLayers++;
-		}			
-		catch (NoSuchAlgorithmException e) {
-			throw new RuntimeException("Encryption of concatcryptomessage failed: " + e.toString());
-		}
+	{	
+		for(CryptoMessage msg : messages)
+			msg.encrypt(publicKey);	
+		this.concatLayers++;	
 	}
 	
 	@Override

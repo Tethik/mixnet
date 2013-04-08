@@ -1,6 +1,5 @@
 package org.juddholm.crypto;
 
-import java.util.List;
 import java.util.Random;
 
 import org.juddholm.mixnet.enums.EncryptionLayer;

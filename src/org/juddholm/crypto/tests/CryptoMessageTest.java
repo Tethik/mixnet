@@ -198,5 +198,38 @@ public class CryptoMessageTest {
 		assertTrue(clone.equals(msg));
 		
 	}
+	
+	@Test
+	public void testReencrypt()
+	{
+		try {
+			msg.setMessage(TestHelper.randomString());
+		} catch (IllegalAccessException e) {
+			fail("Not allowed to set message even though not encrypted!");
+		}
+		
+		// Encrypt
+		CryptoMessage[] layeredMsgs = new CryptoMessage[CHAIN_SIZE];
+		for(int i = 0; i < CHAIN_SIZE; i++) { 
+			msg.encrypt(pairs.get(i).getPublic());
+			layeredMsgs[i] = msg.clone();
+		}
+		
+		for(int i = CHAIN_SIZE -1; i > -1; i--)
+			try {
+				msg.decrypt(pairs.get(i).getPrivate());
+			} catch (IllegalAccessException e) {
+				fail("Decryption failed!");
+			}
+		
+		for(int i = 0; i < CHAIN_SIZE; i++) { 
+			msg.reencrypt(pairs.get(i).getPublic());
+			System.out.println(layeredMsgs[i].getMessage());
+			System.out.println(msg.getMessage());
+			assertEquals(layeredMsgs[i].getMessage(), msg.getMessage());
+			assertTrue(layeredMsgs[i].equals(msg));			
+		}	
+		
+	}
 
 }

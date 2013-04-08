@@ -13,6 +13,10 @@ import java.util.Set;
 import org.juddholm.mixnet.enums.EncryptionLayer;
 
 public class KeyCollection implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7145840762677880980L;
 	private Map<EncryptionLayer, List<Key> > keys = new HashMap<>();
 	private int size = 0;
 	

@@ -1,8 +1,5 @@
 package org.juddholm.mixnet.verifyserver;
 
-import java.net.MalformedURLException;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
 import java.security.Key;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -131,8 +128,6 @@ public class VerifyServer implements Runnable {
 	
 
 	
-	private static final long serialVersionUID = -5976055436215156206L;
-
 	private int expected_index = 0; // Offset -1 to make up for initial collection
 	private boolean initialCryptoReceived = false;
 	public synchronized void putCryptoCollection(CryptoMessageCollection collection) {

@@ -28,7 +28,7 @@ public class ExplicitVerificationTest {
 	private ExplicitVerification veri;
 	@Before
 	public void setUp() throws Exception {
-		veri = new ExplicitVerification();
+		veri = new ExplicitVerification(null, null);
 	}
 
 	

@@ -1,21 +1,11 @@
 package org.juddholm.crypto;
 
-import java.security.Key;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.TreeSet;
-
 import org.juddholm.mixnet.enums.EncryptionLayer;
 import org.juddholm.mixnet.interfaces.Verification;
 
 public class ExplicitVerification implements Verification {
 	
 	
-	private KeyPairCollection keys;
 	private VerificationResult result = new VerificationResult();
 	
 	private EncryptionLayer from;
