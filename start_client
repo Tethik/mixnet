@@ -1,3 +1,0 @@
-#!/bin/bash
-
-java -cp bin/:lib/javajson.jar org.juddholm.voteclient.VoteClient $@

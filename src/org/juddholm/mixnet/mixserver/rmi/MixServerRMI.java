@@ -140,6 +140,9 @@ public class MixServerRMI extends RMIServer implements MixServerInterface, Outpu
 
 	@Override
 	public synchronized List<VerificationStatus> getVerifications(VerificationType type) {
+		if(settings.getVerifyServers().length == 0)
+			return new ArrayList<>();
+		
 		while(verifications.get(type) == null || verifications.get(type).size() < settings.getVerifyServers().length)
 			try {
 				wait();

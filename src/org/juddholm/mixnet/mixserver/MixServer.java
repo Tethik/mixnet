@@ -59,10 +59,7 @@ public class MixServer implements Runnable {
 	}
 
 	public boolean decrypt(EncryptionLayer layer) 
-	{
-		System.out.println("# Waiting for my turn to decrypt for stage " + layer);
-		waitForList();
-		
+	{		
 		if(layer == EncryptionLayer.FINAL && output.isFirst())
 		{
 			cleanupDuplicates();
@@ -179,8 +176,15 @@ public class MixServer implements Runnable {
 
 	@Override
 	public void run() {	
+		
+		long start_time = -1;
+		
 		for(EncryptionLayer layer : layers)
 		{				
+			System.out.println("# Waiting for my turn to decrypt for stage " + layer);
+			waitForList();
+			if(start_time < 0) start_time = System.currentTimeMillis();
+			
 			if(!decrypt(layer))
 			{
 				System.out.println("# Decryption failed!");
@@ -229,6 +233,8 @@ public class MixServer implements Runnable {
 					System.out.println("# Dummy Verification passed!");
 				}
 			}
+			
+			System.out.println("Time taken: " + (System.currentTimeMillis() - start_time) + " ms");
 			
 			
 		}

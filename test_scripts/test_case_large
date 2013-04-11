@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Start vote server
+./start_registry json/VoteServer.json
+
+# Start mix nodes
+./start_mixnode json/m1.json
+./start_mixnode json/m2.json
+./start_mixnode json/m3.json
+
+# Start verifiers
+./start_verifier json/v1.json
+./start_verifier json/v2.json
+./start_verifier json/v3.json
+
+echo "Waiting a few seconds to send votes."
+sleep 4
+# Start simulated clients
+
+for i in {1..1000}
+do
+	./start_client json/VoteClient.json Clinton
+	./start_client json/VoteClient.json Bush
+done
+
+echo "Votes sent."
+#./start_client json/VoteClient.json Clinton
+#./start_client json/VoteClient.json Clinton
+#./start_client json/VoteClient.json Clinton
+#./start_client json/VoteClient.json Bush
+

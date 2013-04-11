@@ -1,0 +1,6 @@
+{
+	firstMixnode: "//localhost/m1",
+	"verifyServers": [
+	],
+	name: "TestVoteServer"
+}

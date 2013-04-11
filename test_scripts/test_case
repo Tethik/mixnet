@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Start vote server
-./start_registry
+./start_registry json/VoteServer.json
 
 # Start mix nodes
 ./start_mixnode json/m1.json
